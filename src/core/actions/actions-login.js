@@ -11,12 +11,13 @@ document.global_keystore = null;
 document._passwd = "";
 document.dollarMateContract = null;
 document.coinbase = null;
-document.contractAddress = "0x62227531b82259561cc9ad4413188f08e536598a";
+document.contractAddress = "0xe2b043315d9c7232b8fbe88c315484244bc370e1"; // production
+// document.contractAddress = "0x62227531b82259561cc9ad4413188f08e536598a"; // dev
 document.gas = 400000 // reduce this to around 80k
-document.gasPrice = 5000000000 // 1 GW -> in production we are 1 GW people have fucked up the servers
+document.gasPrice = 10000000000 // 10 GW -> in production we are 1 GW; people have fucked up the servers
 // https://ropsten.infura.io/uQ1IJxFulSUbz2UfH5OE
-var server = "http://localhost:7545";
-//var server = "https://ropsten.infura.io/uQ1IJxFulSUbz2UfH5OE";
+//var server = "http://localhost:7545";
+var server = "https://ropsten.infura.io/uQ1IJxFulSUbz2UfH5OE";
 function setWeb3Provider(keystore) {
     var web3Provider = new HookedWeb3Provider({
         host: server,
