@@ -53,6 +53,12 @@ export default class CreateCertificate extends React.Component {
         this.saveToIpfs = this.saveToIpfs.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
 
+        this.actionTriggered = false;
+
+    }
+
+    componentDidMount() {
+        this.actionTriggered = false;
     }
 
     handleScan(data) {        

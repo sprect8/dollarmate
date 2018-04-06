@@ -17,18 +17,18 @@ export function accountsReducer(state = initialState, action) {
 
     case constants.ETH_BALANCE:
       return Object.assign({}, state, {
-        balance: action.balance
+        balance: action.balance,        
       });
 
     case constants.IDINAR_BALANCE:
       return Object.assign({}, state, {
-        iDinar: action.iDinar
+        iDinar: action.iDinar,        
       });
 
     case constants.ACC_ERROR:          
       return Object.assign({}, state, {
         coinbase: action.coinbase,
-        error: action.error
+        error: action.error,        
       });
 
     default:

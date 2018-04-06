@@ -56,7 +56,7 @@ function mapStateToProps(state) {
     certId: state.cert.certId,
     type: state.cert.type,
     coinbase: state.login.coinbase,
-    userType: state.login.userType
+    userType: state.login.userType,
   };
 }
 

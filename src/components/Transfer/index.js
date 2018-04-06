@@ -45,6 +45,11 @@ export default class TransferComponent extends Component {
       delay: 400,
       value: 0
     };
+    this.transferred = false;
+  }
+
+  componentDidMount() {
+    this.transferred = false;
   }
 
   handleScan(data) {
@@ -95,6 +100,7 @@ export default class TransferComponent extends Component {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, Send it!'
     }).then((result) => {
+      this.transferred = true;
       if (result.value) {
         // delete
         this.props.actions.acc.sendIDinar(this.props.coinbase, this.state.recipient, this.state.value);
@@ -108,6 +114,16 @@ export default class TransferComponent extends Component {
   }
 
   render() {
+    if (this.props.tx && this.transferred) {
+      this.transferred = false;
+      this.props.actions.acc.fetchIDinarBalance(this.props.coinbase);
+      this.props.actions.acc.fetchEthBalance(this.props.coinbase);
+      this.props.history.push({
+        pathname: "/Home"
+      });
+      return <div></div>;
+      
+    }
     const actions = [
       <FlatButton
         label="Cancel"

@@ -5,7 +5,8 @@ const initialState = {
   certificate: null,
   certificates: [],
   error: null,
-  certificateStatus: ""
+  certificateStatus: "",
+  type: null,
 };
 
 export function certificateReducer(state = initialState, action) {
@@ -13,12 +14,14 @@ export function certificateReducer(state = initialState, action) {
     case constants.CERT_LIST_FETCHED:
       
       return Object.assign({}, state, {
-        certificates: action.certificates
+        certificates: action.certificates,
+        type: null,
       });
 
     case constants.CERT_FETCHED:
       return Object.assign({}, state, {
-        certificate: action.certificate
+        certificate: action.certificate,
+        type: null
       });
 
     case constants.CERT_VETTED:

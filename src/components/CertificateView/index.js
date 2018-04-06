@@ -8,7 +8,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel';
 import EditorAttachMoney from 'material-ui/svg-icons/editor/attach-money';
 import swal from 'sweetalert2'
-
+import constants from 'core/types';
 import {
   Table,
   TableBody,
@@ -144,6 +144,12 @@ export default class CertificateView extends React.Component {
 
   render() {
     console.log(this.props);
+    if (this.props.type == constants.CERT_VETTED || this.props.type == constants.CERT_MINTED || this.props.type == constants.CERT_REJECTED) {
+      this.props.history.push({
+        pathname: "/certificateList"
+      });
+      return <div></div>;
+    }
 
 
     if (!this.props.certificate) {
