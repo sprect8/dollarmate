@@ -120,7 +120,7 @@ export function fetchCertificates(certIdStart) {
             let totalDinar = results[2];
             let totalResource = results[3];
 
-            for (var i = 0; i < results.length; ++i) {                
+            for (var i = 0; i < 10; ++i) {                
                 if (ids[i] == 0) break;
                 var status = getStatus(statuses[i]);
                 

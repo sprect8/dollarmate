@@ -33,6 +33,7 @@ export default class CertificateList extends React.Component {
   }
 
   componentDidMount() {    
+    this.currentIndex = 100; // reset
     this.props.actions.cert.fetchCertificates(this.currentIndex);
 
   }
