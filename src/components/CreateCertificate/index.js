@@ -117,7 +117,7 @@ export default class CreateCertificate extends React.Component {
             allowEnterKey: false,
             showConfirmButton: false
           })
-        this.props.contract.requestMintCoin(owner, hash, value, {from:this.props.coinbase, gas:document.gasPrice, gasPrice:4000000}).then((r)=>{
+        this.props.contract.requestMintCoin(owner, hash, value, {from:this.props.coinbase, gas:document.gas, gasPrice:document.gasPrice}).then((r)=>{
             console.log(r);        
             Swal.close(); // close existing one, replace with our new one    
             Swal({title: 'Successfully submitted certificate', html:'Certificate submitted succesfully, View details here: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + r.tx +'">Txn Details</a>', type:'success'})

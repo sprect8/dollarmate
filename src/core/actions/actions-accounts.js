@@ -61,7 +61,7 @@ export function sendIDinar(coinbase, otherAcc, amount) {
         showConfirmButton: false
       })
     return function(dispatch) {
-        document.dollarMateContract.transfer(otherAcc, amount, {from:coinbase, gas:document.gasPrice*2, gasPrice:4000000})
+        document.dollarMateContract.transfer(otherAcc, amount, {from:coinbase, gas:document.gas, gasPrice:document.gasPrice})
         .then(tx=>{
             Swal.close();
             Swal({title: 'Successfully Transferred iDinar', html:'Certificate Transferred iDinar between two accounts succesfully, View details here: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + tx.tx +'">Txn Details</a>', type:'success'})

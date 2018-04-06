@@ -176,7 +176,7 @@ export function vetCertificate(certId, amount) {
       })
     return function(dispatch) {
         
-        document.dollarMateContract.vetCoin(certId, amount, {from:document.coinbase, gas:document.gasPrice, gasPrice:4000000})
+        document.dollarMateContract.vetCoin(certId, amount, {from:document.coinbase, gas:document.gas, gasPrice:document.gasPrice})
         .then((tx) => {
             Swal.close();
             Swal({title: 'Successfully vetted certificate', html:'Certificate submitted succesfully, View details here: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + tx.tx +'">Txn Details</a>', type:'success'})
@@ -202,7 +202,7 @@ export function mintCertificate(certId) {
         showConfirmButton: false
       })
     return function(dispatch) {
-        document.dollarMateContract.mintCoin(certId, {from:document.coinbase, gas:document.gasPrice, gasPrice:4000000})
+        document.dollarMateContract.mintCoin(certId, {from:document.coinbase, gas:document.gas, gasPrice:document.gasPrice})
         .then((tx) => {
             Swal.close();
             Swal({title: 'Successfully minted certificate', html:'Certificate submitted succesfully, View details here: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + tx.tx +'">Txn Details</a>', type:'success'})
@@ -229,7 +229,7 @@ export function rejectCertificate(certId) {
         showConfirmButton: false
       })
     return function(dispatch) {
-        document.dollarMateContract.rejectCoin(certId, {from:document.coinbase, gas:document.gasPrice, gasPrice:4000000})
+        document.dollarMateContract.rejectCoin(certId, {from:document.coinbase, gas:document.gas, gasPrice:document.gasPrice})
         .then(tx => {
             Swal.close();
             Swal({title: 'Successfully Rejected certificate', html:'Certificate Rejected succesfully, View details here: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + tx.tx +'">Txn Details</a>', type:'success'})
@@ -244,7 +244,7 @@ export function rejectCertificate(certId) {
 
 export function lockCertificate(certId) {
     return function(dispatch) {
-        document.dollarMateContract.lockCoin(certId, {from:document.coinbase, gas:document.gasPrice, gasPrice:4000000})
+        document.dollarMateContract.lockCoin(certId, {from:document.coinbase, gas:document.gas, gasPrice:document.gasPrice})
         .then(tx => {
             dispatch(_lockCertificate(certId, tx));
         })
@@ -256,7 +256,7 @@ export function lockCertificate(certId) {
 
 export function unlockCertificate(certId) {
     return function(dispatch) {
-        document.dollarMateContract.unlockCoin(certId, {from:document.coinbase, gas:document.gasPrice, gasPrice:4000000})
+        document.dollarMateContract.unlockCoin(certId, {from:document.coinbase, gas:document.gas, gasPrice:document.gasPrice})
         .then(tx => {
             dispatch(_unlockCertificate(certId, tx));
         })
