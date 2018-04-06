@@ -18,9 +18,10 @@ export function loginReducer(state = initialState, action) {
     case constants.SELECT_USER:
       var userType = 99;
 
-      if (action.coinbase) {
-        userType = state.roles[state.addresses.indexOf(action.coinbase)].role;
+      if (action.coinbase) {        
+        userType = state.roles.filter((x)=>{return x.address == action.coinbase})[0].role;
       }
+      console.log(userType);
       
       return Object.assign({}, state, {
         coinbase: action.coinbase,

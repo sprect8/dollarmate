@@ -21,14 +21,25 @@ import {
 
 /* component styles */
 import { styles } from './styles.scss';
+import RaisedButton from 'material-ui/RaisedButton/RaisedButton';
 
 export default class CertificateList extends React.Component {
   constructor(props) {
     super(props);
+    this.currentIndex = 100;
+    this.loadingMore = false;
+    this.currentCertificates = [];
+    this.seenCerts = {};
   }
 
-  componentDidMount() {
-    this.props.actions.cert.fetchCertificates(100);
+  componentDidMount() {    
+    this.props.actions.cert.fetchCertificates(this.currentIndex);
+
+  }
+
+  loadMore() {
+    this.props.actions.cert.fetchCertificates(this.currentIndex);
+    this.loadingMore = true;
   }
 
   // generate some fake certificates
@@ -44,6 +55,14 @@ export default class CertificateList extends React.Component {
     console.log(props, "CERT");
 
     let certificates = props.certificates ? props.certificates : [];
+    certificates.forEach(c=>{
+      if (!this.seenCerts[c.id]) {
+        this.currentCertificates.push(c);
+        this.currentIndex ++;
+        this.seenCerts[c.id] = 1;
+      }      
+    })
+    certificates = this.currentCertificates;
     return (
       <div>
         <Table
@@ -76,9 +95,10 @@ export default class CertificateList extends React.Component {
                   </TableRowColumn>
                 </TableRow>
               })
-            }
+            }            
           </TableBody>
         </Table>
+        <RaisedButton label={"Load More"} primary={true} onClick={this.loadMore.bind(this)}/>
       </div>
     );
   }

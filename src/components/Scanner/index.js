@@ -92,6 +92,7 @@ export default class QRScanner extends Component {
               style={previewStyle}
               onError={this.handleError.bind(this)}
               onScan={this.handleScan.bind(this)}
+              facingMode="rear"
             />
 
             <QrReader

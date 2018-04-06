@@ -12,6 +12,7 @@ document._passwd = "";
 document.dollarMateContract = null;
 document.coinbase = null;
 document.contractAddress = "0xe2b043315d9c7232b8fbe88c315484244bc370e1";
+document.gasPrice = 100000
 // https://ropsten.infura.io/uQ1IJxFulSUbz2UfH5OE
 function setWeb3Provider(keystore) {
     var web3Provider = new HookedWeb3Provider({
@@ -47,13 +48,26 @@ function dispatchRoles(addresses, dispatch) {
             roles.push({address:addr, role:r.toString()});
 
             if (roles.length == 4) {
+                Swal.close();
                 dispatch(rolesRetrieved(roles));
+                dispatch(loginSuccessful(addresses)); // race condition
             }
         })        
     })    
 }
 
 function getAddresses(dispatch, password) {
+    Swal({
+        title: 'Please wait while your addresses are being retrieved',
+        text: 'This may take some time depending on network connection',            
+        onOpen: () => {
+          Swal.showLoading()
+        },
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        showConfirmButton: false
+      })
 
     document.global_keystore.keyFromPassword(password, function (err, pwDerivedKey) {
         if (err) {
@@ -72,7 +86,7 @@ function getAddresses(dispatch, password) {
         // document.coinbase = addresses[0]; // but we need to select!
         if (document.dollarMateContract) {
             dispatchRoles(addresses, dispatch);
-            dispatch(loginSuccessful(addresses)); // race condition
+            
         }
         else {
             let ct = contract({ abi: ABI, address: document.contractAddress });
@@ -83,7 +97,7 @@ function getAddresses(dispatch, password) {
             ct.at(document.contractAddress).then((instance) => {
                 document.dollarMateContract = instance;
                 dispatchRoles(addresses, dispatch);
-                dispatch(loginSuccessful(addresses)); // race condition
+                //dispatch(loginSuccessful(addresses)); // race condition
             });
         }        
     });

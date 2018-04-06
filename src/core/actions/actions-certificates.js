@@ -68,6 +68,11 @@ function _unlockCertificate(certId, tx) {
 }
 
 function _certError(certId, e) {
+    Swal(
+        'Error occurred',
+        'Error occurred interacting with your certificate [' + certId + '], error was ' + e,
+        'error'
+      );
     return {
         type: constants.CERT_ERROR,
         certificateId: certId,
@@ -157,9 +162,24 @@ export function fetchCertificate(certId) {
 }
 
 export function vetCertificate(certId, amount) {
+    Swal({
+        title: 'Please wait while we Vet the certificate',
+        html: 'Certificate ' + certId + " vetted for total of ["+amount+'] Dinar. Your request is being processed on a public blockchain.'+
+        ' During times it may be congested. This may take upwards of 5 minutes to complete. ', //View current contract congestion here: <a target="_blank" href="https://ropsten.etherscan.io/address/'+document.contractAddress+">Txn Details</a>",            
+        onOpen: () => {
+          Swal.showLoading()
+        },
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        showConfirmButton: false
+      })
     return function(dispatch) {
-        document.dollarMateContract.vetCoin(certId, amount, {from:document.coinbase, gas:400000, gasPrice:4000000})
+        
+        document.dollarMateContract.vetCoin(certId, amount, {from:document.coinbase, gas:document.gasPrice, gasPrice:4000000})
         .then((tx) => {
+            Swal.close();
+            Swal({title: 'Successfully vetted certificate', html:'Certificate submitted succesfully, View details here: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + tx.tx +'">Txn Details</a>', type:'success'})
             dispatch(_vetCertificate(certId, tx));
         })
         .catch((e) => {
@@ -169,9 +189,24 @@ export function vetCertificate(certId, amount) {
 }
 
 export function mintCertificate(certId) {
+    Swal({
+        title: 'Please wait while we authorize Minting the certificate',
+        html: 'Certificate ' + certId + ' will be minted. Your request is being processed on a public blockchain. '+
+        'During times it may be congested. This may take upwards of 5 minutes to complete. ',//View current contract congestion here: <a target="_blank" href="https://ropsten.etherscan.io/address/'+document.contractAddress+">Txn Details</a>",            
+        onOpen: () => {
+          Swal.showLoading()
+        },
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        showConfirmButton: false
+      })
     return function(dispatch) {
-        document.dollarMateContract.mintCoin(certId, {from:document.coinbase, gas:400000, gasPrice:4000000})
+        document.dollarMateContract.mintCoin(certId, {from:document.coinbase, gas:document.gasPrice, gasPrice:4000000})
         .then((tx) => {
+            Swal.close();
+            Swal({title: 'Successfully minted certificate', html:'Certificate submitted succesfully, View details here: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + tx.tx +'">Txn Details</a>', type:'success'})
+            
             dispatch(_mintCertificate(certId, tx));
         })
         .catch((e) => {
@@ -181,9 +216,24 @@ export function mintCertificate(certId) {
 }
 
 export function rejectCertificate(certId) {
+    Swal({
+        title: 'Please wait while we Reject Certificate',
+        html: 'Certificate ' + certId + ' will be Rejected. Your request is being processed on a public blockchain. '+
+        'During times it may be congested. This may take upwards of 5 minutes to complete. ',//View current contract congestion here: <a target="_blank" href="https://ropsten.etherscan.io/address/'+document.contractAddress+">Txn Details</a>",            
+        onOpen: () => {
+          Swal.showLoading()
+        },
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        showConfirmButton: false
+      })
     return function(dispatch) {
-        document.dollarMateContract.rejectCoin(certId, {from:document.coinbase, gas:400000, gasPrice:4000000})
+        document.dollarMateContract.rejectCoin(certId, {from:document.coinbase, gas:document.gasPrice, gasPrice:4000000})
         .then(tx => {
+            Swal.close();
+            Swal({title: 'Successfully Rejected certificate', html:'Certificate Rejected succesfully, View details here: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + tx.tx +'">Txn Details</a>', type:'success'})
+            
             dispatch(_rejectCertificate(certId, tx));
         })
         .catch((e) => {
@@ -194,7 +244,7 @@ export function rejectCertificate(certId) {
 
 export function lockCertificate(certId) {
     return function(dispatch) {
-        document.dollarMateContract.lockCoin(certId, {from:document.coinbase, gas:400000, gasPrice:4000000})
+        document.dollarMateContract.lockCoin(certId, {from:document.coinbase, gas:document.gasPrice, gasPrice:4000000})
         .then(tx => {
             dispatch(_lockCertificate(certId, tx));
         })
@@ -206,7 +256,7 @@ export function lockCertificate(certId) {
 
 export function unlockCertificate(certId) {
     return function(dispatch) {
-        document.dollarMateContract.unlockCoin(certId, {from:document.coinbase, gas:400000, gasPrice:4000000})
+        document.dollarMateContract.unlockCoin(certId, {from:document.coinbase, gas:document.gasPrice, gasPrice:4000000})
         .then(tx => {
             dispatch(_unlockCertificate(certId, tx));
         })

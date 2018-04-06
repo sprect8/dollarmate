@@ -37,6 +37,11 @@ function _idinarSending(tx) {
 }
 
 function _accError(coinbase, e) {
+    Swal(
+        'Error occurred',
+        'Error occurred interacting with your account, error was ' + e,
+        'error'
+      );
     return {
         type: constants.ACC_ERROR,
         coinbase: coinbase,
@@ -44,12 +49,29 @@ function _accError(coinbase, e) {
     }
 }
 export function sendIDinar(coinbase, otherAcc, amount) {
+    Swal({
+        title: 'Please wait while we transfer the iDinar',
+        text: 'Sending ' + amount + ' iDinar to [' + otherAcc + ']. Your request is being processed on a public blockchain. During times it may be congested. This may take upwards of 5 minutes to complete.',            
+        onOpen: () => {
+          Swal.showLoading()
+        },
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        showConfirmButton: false
+      })
     return function(dispatch) {
-        document.dollarMateContract.transfer(otherAcc, amount, {from:coinbase, gas:400000, gasPrice:4000000})
+        document.dollarMateContract.transfer(otherAcc, amount, {from:coinbase, gas:document.gasPrice*2, gasPrice:4000000})
         .then(tx=>{
+            Swal.close();
+            Swal({title: 'Successfully Transferred iDinar', html:'Certificate Transferred iDinar between two accounts succesfully, View details here: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + tx.tx +'">Txn Details</a>', type:'success'})
+            
             dispatch(_idinarSending(tx));
+            fetchIDinarBalance(coinbase);
+            fetchEthBalance(coinbase); // refresh my balance
         })
         .catch(e=>{
+            Swal.close();
             dispatch(_accError(coinbase, e));
         });
     }    

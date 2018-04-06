@@ -105,18 +105,33 @@ export default class CreateCertificate extends React.Component {
         var owner = this.state.certOwner;
         var value = this.state.certAmount;
         console.log(owner, hash, value);
-        this.props.contract.requestMintCoin(owner, hash, value, {from:this.props.coinbase, gas:400000, gasPrice:4000000}).then((r)=>{
-            console.log(r);
-            Swal('Successfully submitted certificate', 'Certificate submitted succesfully, please wait for validation ' + JSON.stringify(r), 'success')
+        Swal({
+            title: 'Please wait while your request is being processed',
+            html: 'Your request is being processed on a public blockchain. '+
+            'During times it may be congested. This may take upwards of 5 minutes to complete. ', //View current contract congestion here: <a target="_blank" href="https://ropsten.etherscan.io/address/'+document.contractAddress+">Txn Details</a>",            
+            onOpen: () => {
+              Swal.showLoading()
+            },
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            showConfirmButton: false
+          })
+        this.props.contract.requestMintCoin(owner, hash, value, {from:this.props.coinbase, gas:document.gasPrice, gasPrice:4000000}).then((r)=>{
+            console.log(r);        
+            Swal.close(); // close existing one, replace with our new one    
+            Swal({title: 'Successfully submitted certificate', html:'Certificate submitted succesfully, View details here: <a target="_blank" href="https://ropsten.etherscan.io/tx/' + r.tx +'">Txn Details</a>', type:'success'})
             .then((result) => {
                 this.props.history.push({
                     pathname: "/certificateList"
                 })
             });
-        }).catch( e =>{
+        })
+        .catch( e =>{
             console.log(e);
             Swal('Failed to Submit iDinar Certificate', 'Something went wrong uploading certificate to IBadah! Error was ' + e, 'error');
         });
+        //console.log(txn, "from return")
         
     }
 
@@ -159,9 +174,20 @@ export default class CreateCertificate extends React.Component {
     saveToIpfs(reader, key) {
         let ipfsId
         const buffer = Buffer.from(reader.result)
-        
+        Swal({
+            title: 'Saving file to IPFS',
+            text: 'Saving your file with key ' + key + " to IPFS, please stand by",            
+            onOpen: () => {
+              Swal.showLoading()
+            },
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            showConfirmButton: false
+          })
         this.ipfsApi.add(buffer, { progress: (prog) => console.log(`received: ${prog}`) })
             .then((response) => {
+                Swal.close();
                 console.log(response)
                 ipfsId = response[0].hash
                 console.log(ipfsId)
@@ -370,6 +396,7 @@ export default class CreateCertificate extends React.Component {
                             style={previewStyle}
                             onError={this.handleError.bind(this)}
                             onScan={this.handleScan.bind(this)}
+                            facingMode="rear"
                         />
 
                         <QrReader
